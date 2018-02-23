@@ -1,16 +1,11 @@
 package com.domain.certification.api.web;
 
 import com.domain.certification.api.data.Course;
-import com.domain.certification.api.data.User;
 import com.domain.certification.api.exception.UnProcessableEntityException;
 import com.domain.certification.api.service.CourseService;
 import com.domain.certification.api.util.dto.Course.CourseDTO;
 import com.domain.certification.api.util.dto.response.PageDTO;
 import com.domain.certification.api.util.dto.response.ResponseDTO;
-import com.domain.certification.api.util.dto.user.UserDTO;
-import com.domain.certification.api.util.dto.user.UserLoginDTO;
-import com.domain.certification.api.util.dto.user.UserRequestDTO;
-import com.domain.certification.api.util.enumerator.RoleType;
 import com.domain.certification.api.web.hateoasAssembler.CourseAssembler;
 import com.domain.certification.api.web.validator.CourseValidator;
 import org.springframework.data.domain.Page;
@@ -75,7 +70,7 @@ public class CourseController {
     }
 
 
-    @PostMapping(
+    @PutMapping(
             value = "/courses/{id}",
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE

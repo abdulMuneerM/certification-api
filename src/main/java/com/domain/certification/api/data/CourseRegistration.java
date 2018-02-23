@@ -10,7 +10,7 @@ public class CourseRegistration {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
+    private Long id;
 
     @NotNull(message = "user cannot be null.")
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -31,11 +31,11 @@ public class CourseRegistration {
     @NotNull(message = "lastModifiedAt cannot be null.")
     private Long lastModifiedAt;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

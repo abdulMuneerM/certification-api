@@ -5,7 +5,6 @@ import com.domain.certification.api.exception.AuthorizationRequiredException;
 import com.domain.certification.api.exception.DuplicateEntityException;
 import com.domain.certification.api.exception.EntityNotFoundException;
 import com.domain.certification.api.exception.UnProcessableEntityException;
-import com.domain.certification.api.repository.CourseRegistrationRepository;
 import com.domain.certification.api.repository.CourseRepository;
 import com.domain.certification.api.security.SecurityHelper;
 import com.domain.certification.api.util.CoreService;
@@ -28,15 +27,10 @@ public class CourseServiceImpl implements CourseService {
 
     private static final Logger LOG = LoggerFactory.getLogger(CourseServiceImpl.class);
     private final CourseRepository courseRepository;
-    private final CourseRegistrationRepository courseRegistrationRepository;
-    private final UserService userService;
     private final CoreService coreService;
 
-    public CourseServiceImpl(CourseRepository courseRepository, CourseRegistrationRepository courseRegistrationRepository,
-                             UserService userService, CoreService coreService) {
+    public CourseServiceImpl(CourseRepository courseRepository, CoreService coreService) {
         this.courseRepository = courseRepository;
-        this.courseRegistrationRepository = courseRegistrationRepository;
-        this.userService = userService;
         this.coreService = coreService;
     }
 
