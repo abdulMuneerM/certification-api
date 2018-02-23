@@ -65,7 +65,7 @@ public class CourseRegistrationController {
             produces = MediaType.APPLICATION_JSON_VALUE
     )
     ResponseEntity<ResponseDTO> updateCourseRegistrationResult(@PathVariable(name = "id") Long id,
-                                                               @PathVariable(name = "result")CourseResult result) {
+                                                               @PathVariable(name = "result") CourseResult result) {
         CourseRegistration courseRegistration = courseRegistrationService.updateCourseResult(id, result);
 
         Map<String, CourseRegistrationDTO> data = new HashMap<>();

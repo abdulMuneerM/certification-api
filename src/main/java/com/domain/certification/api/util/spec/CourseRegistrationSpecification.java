@@ -21,19 +21,19 @@ public class CourseRegistrationSpecification implements Specification<CourseRegi
 
         switch (criteria.getKey()) {
             case "courseId":
-                key = root.get("Course").get("id");
+                key = root.get("course").get("id");
                 break;
             case "courseName":
                 key = root.get("course").get("name");
                 break;
             case "courseCost":
-                key = root.get("Course").get("cost");
+                key = root.get("course").get("cost");
                 break;
             case "userId":
-                key = root.get("User").get("id");
+                key = root.get("user").get("id");
                 break;
             case "userName":
-                key = root.get("User").get("name");
+                key = root.get("user").get("name");
                 break;
             default:
                 key = root.get(criteria.getKey());
