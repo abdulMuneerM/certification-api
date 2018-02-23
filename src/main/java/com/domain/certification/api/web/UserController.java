@@ -152,7 +152,6 @@ public class UserController {
 
         ResponseDTO<Map<String, Object>> response = new ResponseDTO<>();
         response.setData(data);
-        ;
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }
