@@ -1,7 +1,7 @@
 package com.domain.certification.api.service;
 
 import com.domain.certification.api.data.User;
-import com.domain.certification.api.util.dto.UserLoginDTO;
+import com.domain.certification.api.util.dto.user.UserLoginDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -12,8 +12,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
-
-import javax.servlet.http.HttpSession;
 
 @Service
 public class SessionServiceImpl implements SessionService {
@@ -40,7 +38,7 @@ public class SessionServiceImpl implements SessionService {
 
         if (token.isAuthenticated()) {
             SecurityContextHolder.getContext().setAuthentication(authentication);
-            LOG.debug("Auto login {} successfully!", email);
+            LOG.info("Login {} successfully!", email);
         }
 
         User user = userService.findByEmail(email);

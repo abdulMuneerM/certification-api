@@ -2,7 +2,6 @@ package com.domain.certification.api.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -19,21 +18,24 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final UserDetailsService userDetailsService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final HttpAuthenticationEntryPoint httpAuthenticationEntryPoint;
 
-    public WebSecurityConfig(UserDetailsService userDetailsService, BCryptPasswordEncoder bCryptPasswordEncoder) {
+    public WebSecurityConfig(UserDetailsService userDetailsService, BCryptPasswordEncoder bCryptPasswordEncoder,
+                             HttpAuthenticationEntryPoint httpAuthenticationEntryPoint) {
         this.userDetailsService = userDetailsService;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+        this.httpAuthenticationEntryPoint = httpAuthenticationEntryPoint;
     }
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
-                .authorizeRequests().antMatchers("/users/signUp", "/users/signIn").permitAll()
+                .exceptionHandling().authenticationEntryPoint(httpAuthenticationEntryPoint)
+                .and()
+                .authorizeRequests().antMatchers("/signUp", "/signIn").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin().disable()
-                .logout().permitAll()
-                .and()
                 .csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED);
     }

@@ -1,6 +1,6 @@
 package com.domain.certification.api.service;
 
-import com.domain.certification.api.util.dto.UserLoginDTO;
+import com.domain.certification.api.util.dto.user.UserLoginDTO;
 
 public interface SessionService {
 

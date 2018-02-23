@@ -1,8 +1,7 @@
 package com.domain.certification.api.service;
 
 import com.domain.certification.api.data.User;
-import com.domain.certification.api.util.dto.UserDTO;
-import com.domain.certification.api.util.dto.UserRequestDTO;
+import com.domain.certification.api.util.dto.user.UserRequestDTO;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;

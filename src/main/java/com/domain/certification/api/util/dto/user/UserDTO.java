@@ -1,4 +1,4 @@
-package com.domain.certification.api.util.dto;
+package com.domain.certification.api.util.dto.user;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
