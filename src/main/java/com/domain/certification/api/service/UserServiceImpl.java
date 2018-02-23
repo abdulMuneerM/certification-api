@@ -8,19 +8,24 @@ import com.domain.certification.api.exception.EntityNotFoundException;
 import com.domain.certification.api.exception.UnProcessableEntityException;
 import com.domain.certification.api.repository.UserCredentialRepository;
 import com.domain.certification.api.repository.UserRepository;
+import com.domain.certification.api.util.CoreService;
 import com.domain.certification.api.util.dto.user.UserRequestDTO;
+import com.domain.certification.api.util.spec.UserSpecificationBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.regex.Matcher;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -30,13 +35,15 @@ public class UserServiceImpl implements UserService {
     private final UserCredentialRepository userCredentialRepository;
     private final RoleService roleService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final CoreService coreService;
 
     public UserServiceImpl(UserRepository userRepository, UserCredentialRepository userCredentialRepository,
-                           RoleService roleService, BCryptPasswordEncoder bCryptPasswordEncoder) {
+                           RoleService roleService, BCryptPasswordEncoder bCryptPasswordEncoder, CoreService coreService) {
         this.userRepository = userRepository;
         this.userCredentialRepository = userCredentialRepository;
         this.roleService = roleService;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+        this.coreService = coreService;
     }
 
     @Transactional(readOnly = true)
@@ -98,13 +105,34 @@ public class UserServiceImpl implements UserService {
         userCredential.setUser(user);
         user.setCredential(userCredential);
 
-        user.setCreatedAt(Instant.now().getEpochSecond());
+        user.setCreatedAt(coreService.getCurrentEpochSeconds());
         return userRepository.save(user);
     }
 
     @Override
-    public List<User> findAll(String searchFilter, Pageable pageable) {
-        return null;
+    public Page<User> findAll(String searchFilter, Pageable pageable) {
+        UserSpecificationBuilder builder = new UserSpecificationBuilder();
+        Matcher matcher = coreService.searchPatternMatcher(searchFilter);
+        while (matcher.find()) {
+            builder.with(
+                    matcher.group(1),
+                    matcher.group(2),
+                    matcher.group(4),
+                    matcher.group(3),
+                    matcher.group(5));
+        }
+
+        Specification<User> spec = builder.build();
+
+        Page<User> users;
+        try {
+            users = userRepository.findAll(spec, pageable);
+        } catch (InvalidDataAccessApiUsageException e) {
+            LOG.error("Exception: {}", e);
+            throw new UnProcessableEntityException("Could not validate request");
+        }
+
+        return users;
     }
 
     private String getEncryptedPassword(String password) {
