@@ -1,0 +1,27 @@
+spring:
+  application:
+    name: certification-api
+
+server:
+    port: 8080
+
+flyway:
+  enabled: true
+  locations: migration
+  outOfOrder: true
+
+db:
+  url: jdbc:mysql://host/dbname
+  username: username
+  password: password
+  driverClassName: DriverClass
+
+
+redis:
+  host: localhost
+  password: password
+  port: 6379
+
+config:
+  adminEmail: mail@email.com
+  adminPassword: password
