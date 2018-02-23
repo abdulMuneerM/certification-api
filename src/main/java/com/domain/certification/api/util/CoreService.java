@@ -22,8 +22,6 @@ public class CoreService {
         for (String operation : SearchOperation.SIMPLE_OPERATION_SET) {
             joinNames.add(operation);
         }
-
-//        String operationExpression = Joiner.on("|").join(SearchOperation.SIMPLE_OPERATION_SET);
         String operationExpression = joinNames.toString();
         SEARCH_PATTERN = "(\\w+?)(" + operationExpression + ")(\\*?)([\\w -]+?)(\\*?),";
     }
@@ -33,24 +31,8 @@ public class CoreService {
         return pattern.matcher(search + ",");
     }
 
-
     public Long getCurrentEpochSeconds() {
         return Instant.now().getEpochSecond();
-    }
-
-    public boolean validatePhoneNumber(String phoneNumber, int length) {
-        if (StringUtils.isEmpty(phoneNumber)) {
-            return false;
-        }
-
-        phoneNumber = phoneNumber.replaceAll("[^\\d]", "");
-        phoneNumber = StringUtils.trimWhitespace(phoneNumber);
-
-        if (phoneNumber.length() == length) {
-            return true;
-        } else {
-            return false;
-        }
     }
 
     public boolean validateEmail(String email) {

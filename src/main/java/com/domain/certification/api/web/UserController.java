@@ -8,8 +8,11 @@ import com.domain.certification.api.util.dto.response.PageDTO;
 import com.domain.certification.api.util.dto.response.ResponseDTO;
 import com.domain.certification.api.util.dto.user.UserDTO;
 import com.domain.certification.api.util.dto.user.UserLoginDTO;
+import com.domain.certification.api.util.dto.user.UserLoginRequestDTO;
 import com.domain.certification.api.util.dto.user.UserRequestDTO;
 import com.domain.certification.api.web.hateoasAssembler.UserAssembler;
+import com.domain.certification.api.web.validator.UserLoginValidator;
+import com.domain.certification.api.web.validator.UserRegisterValidator;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -18,8 +21,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,11 +34,21 @@ public class UserController {
     private final UserService userService;
     private final SessionService sessionService;
     private final UserAssembler userAssembler;
+    private final UserRegisterValidator userRegisterValidator;
+    private final UserLoginValidator userLoginValidator;
 
-    public UserController(UserService userService, SessionService sessionService, UserAssembler userAssembler) {
+    public UserController(UserService userService, SessionService sessionService, UserAssembler userAssembler,
+                          UserRegisterValidator userRegisterValidator, UserLoginValidator userLoginValidator) {
         this.userService = userService;
         this.sessionService = sessionService;
         this.userAssembler = userAssembler;
+        this.userRegisterValidator = userRegisterValidator;
+        this.userLoginValidator = userLoginValidator;
+    }
+
+    @InitBinder("userRequestDTO")
+    protected void initUserRegisterBinder(WebDataBinder binder) {
+        binder.setValidator(userRegisterValidator);
     }
 
     @PostMapping(
@@ -41,7 +56,7 @@ public class UserController {
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    ResponseEntity<ResponseDTO> signUp(@RequestBody UserRequestDTO userRequestDTO) {
+    ResponseEntity<ResponseDTO> signUp(@Valid @RequestBody UserRequestDTO userRequestDTO) {
         userService.save(userRequestDTO);
         UserLoginDTO userLoginDTO = sessionService.login(userRequestDTO.getEmail(), userRequestDTO.getPassword());
 
@@ -53,13 +68,18 @@ public class UserController {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
+    @InitBinder("userLoginRequestDTO")
+    protected void initUserLoginBinder(WebDataBinder binder) {
+        binder.setValidator(userLoginValidator);
+    }
+
     @PostMapping(
             value = "/signIn",
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    ResponseEntity<ResponseDTO> signIn(@RequestBody UserRequestDTO userRequestDTO) {
-        UserLoginDTO userLoginDTO = sessionService.login(userRequestDTO.getEmail(), userRequestDTO.getPassword());
+    ResponseEntity<ResponseDTO> signIn(@Valid @RequestBody UserLoginRequestDTO userLoginRequestDTO) {
+        UserLoginDTO userLoginDTO = sessionService.login(userLoginRequestDTO.getEmail(), userLoginRequestDTO.getPassword());
 
         Map<String, UserLoginDTO> data = new HashMap<>();
         data.put("login", userLoginDTO);

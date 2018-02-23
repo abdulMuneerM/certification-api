@@ -7,6 +7,7 @@ import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -94,6 +95,16 @@ public class ExceptionHandlerConfig {
         return errorResponseBuilder.createErrorResponse(
                 message,
                 HttpStatus.UNPROCESSABLE_ENTITY.value(),
+                e.getClass().getSimpleName()
+        );
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<ResponseDTO> handleBadCredentialsExceptionException(BadCredentialsException e) {
+        String message = "Username and password does not match.";
+        return errorResponseBuilder.createErrorResponse(
+                message,
+                HttpStatus.UNAUTHORIZED.value(),
                 e.getClass().getSimpleName()
         );
     }
