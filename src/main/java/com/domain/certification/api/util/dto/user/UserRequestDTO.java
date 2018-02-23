@@ -1,5 +1,6 @@
 package com.domain.certification.api.util.dto.user;
 
+import com.domain.certification.api.util.enumerator.RoleType;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -10,6 +11,8 @@ public class UserRequestDTO {
     private String password;
 
     private String name;
+
+    private RoleType roleType;
 
     public String getEmail() {
         return email;
@@ -33,5 +36,13 @@ public class UserRequestDTO {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public RoleType getRoleType() {
+        return roleType;
+    }
+
+    public void setRoleType(RoleType roleType) {
+        this.roleType = roleType;
     }
 }

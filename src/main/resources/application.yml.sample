@@ -21,3 +21,7 @@ redis:
   host: localhost
   password: password
   port: 6379
+
+config:
+  adminEmail: mail@email.com
+  adminPassword: password

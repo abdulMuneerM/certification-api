@@ -94,7 +94,7 @@ public class UserServiceImpl implements UserService {
         user.setId(UUID.randomUUID().toString());
         user.setName(userRequestDTO.getName());
 
-        Role role = roleService.findById(2);//For student role
+        Role role = roleService.findByRoleName(userRequestDTO.getRoleType().name());
         List<Role> roles = new ArrayList<>();
         roles.add(role);
         user.setRoles(roles);

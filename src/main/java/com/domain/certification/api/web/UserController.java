@@ -10,6 +10,7 @@ import com.domain.certification.api.util.dto.user.UserDTO;
 import com.domain.certification.api.util.dto.user.UserLoginDTO;
 import com.domain.certification.api.util.dto.user.UserLoginRequestDTO;
 import com.domain.certification.api.util.dto.user.UserRequestDTO;
+import com.domain.certification.api.util.enumerator.RoleType;
 import com.domain.certification.api.web.hateoasAssembler.UserAssembler;
 import com.domain.certification.api.web.validator.UserLoginValidator;
 import com.domain.certification.api.web.validator.UserRegisterValidator;
@@ -57,6 +58,7 @@ public class UserController {
             produces = MediaType.APPLICATION_JSON_VALUE
     )
     ResponseEntity<ResponseDTO> signUp(@Valid @RequestBody UserRequestDTO userRequestDTO) {
+        userRequestDTO.setRoleType(RoleType.STUDENT);
         userService.save(userRequestDTO);
         UserLoginDTO userLoginDTO = sessionService.login(userRequestDTO.getEmail(), userRequestDTO.getPassword());
 

@@ -34,3 +34,7 @@ CREATE TABLE IF NOT EXISTS `user_role` (
   UNIQUE KEY `user_role_unique_user_role` (`user_id`,`role_id`),
   KEY `user_role_index_user_id` (`user_id`)
 ) ENGINE=InnoDB;
+
+INSERT INTO role (id, role,description) VALUES
+('1', 'ADMIN', 'Admin Role'),
+('2', 'STUDENT', 'Student role');

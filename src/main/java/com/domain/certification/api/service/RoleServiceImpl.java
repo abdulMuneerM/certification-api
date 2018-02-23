@@ -8,6 +8,7 @@ import com.domain.certification.api.repository.RoleRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 @Service
 public class RoleServiceImpl implements RoleService {
@@ -30,6 +31,21 @@ public class RoleServiceImpl implements RoleService {
         if (role == null) {
             LOG.error("Role does not exist with id {}", id);
             throw new EntityNotFoundException("Role does not exist with id " + id);
+        }
+        return role;
+    }
+
+    @Override
+    public Role findByRoleName(String roleName) {
+        if (StringUtils.isEmpty(roleName)) {
+            LOG.error("role is empty. Please enter valid role.");
+            throw new UnProcessableEntityException("role is empty. Please enter valid role.");
+        }
+
+        Role role = roleRepository.findOneByRole(roleName);
+        if (role == null) {
+            LOG.error("Role does not exist with role name {}", roleName);
+            throw new EntityNotFoundException("Role does not exist with role name " + roleName);
         }
         return role;
     }
